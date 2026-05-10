@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ecosystem.controllers.HelpController" styleClass="root">
+    <top>
+        <VBox alignment="CENTER" style="-fx-padding: 30;">
+            <Label text="Simulation Rules &amp; Concepts" styleClass="title-label"/>
+        </VBox>
+    </top>
+    
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-padding: 0 40 0 40;">
+            <VBox spacing="20.0" styleClass="glass-panel">
+                
+                <Label text="Food Chain Structure" styleClass="section-header"/>
+                <Label wrapText="true" text="• Producers (Plants): Convert sunlight into energy. Spawns over time.&#10;• Primary Consumers (Herbivores): Feed on plants to gain energy.&#10;• Secondary Consumers (Carnivores): Feed on herbivores for energy.&#10;• Omnivores: Feed on both plants and herbivores." styleClass="subtitle-label"/>
+                
+                <Separator/>
+                
+                <Label text="Energy Transfer (10% Rule)" styleClass="section-header"/>
+                <Label wrapText="true" text="Energy is transferred across trophic levels but is very inefficient. Organisms must continually eat to replenish energy lost over time through movement and metabolism." styleClass="subtitle-label"/>
+                
+                <Separator/>
+                
+                <Label text="Population Dynamics" styleClass="section-header"/>
+                <Label wrapText="true" text="• Predator-Prey Cycle: Predator and prey populations are interdependent. Growth in prey causes growth in predators, which then reduces prey, leading to predator starvation.&#10;• Carrying Capacity: The ecosystem has a maximum limit on how many producers it can sustain." styleClass="subtitle-label"/>
+                
+            </VBox>
+        </ScrollPane>
+    </center>
+    
+    <bottom>
+        <HBox alignment="CENTER" style="-fx-padding: 30;">
+            <Button text="Back to Main Menu" onAction="#handleBack" prefWidth="250" styleClass="button, btn-danger"/>
+        </HBox>
+    </bottom>
+</BorderPane>

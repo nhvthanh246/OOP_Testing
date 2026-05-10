@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ecosystem.controllers.MainMenuController" styleClass="root">
+    <top>
+        <Button text="Back" styleClass="back-button" BorderPane.alignment="TOP_LEFT">
+            <BorderPane.margin><Insets top="10" left="10"/></BorderPane.margin>
+        </Button>
+    </top>
+    
+    <center>
+        <StackPane>
+            <BorderPane.margin><Insets top="20" right="100" bottom="20" left="100"/></BorderPane.margin>
+            <VBox alignment="TOP_CENTER" spacing="15.0" styleClass="modern-card">
+                <Label text="Choosing environment and Species" styleClass="main-title" />
+            <Label text="Set up the ecosystem by selecting environment and species. There are also default options to start with." styleClass="body-text" wrapText="true"/>
+            
+            <Label text="Option 1: Plain, Wolf, Sheep" styleClass="option-title" style="-fx-padding: 10 0 0 0;" />
+            <Label text="With abundant resources in the plain, observe the interactions between this classic pair of predator and prey." styleClass="body-text" wrapText="true"/>
+            <Button text="Try this" onAction="#handleBalancedScenario" styleClass="btn-try" />
+            
+            <Label text="Option 2: Island, Cat, Bird" styleClass="option-title" style="-fx-padding: 10 0 0 0;" />
+            <Label text="Island has fewer resources where you can observe interactions between smaller species." styleClass="body-text" wrapText="true"/>
+            <Button text="Try this" onAction="#handleExtinctionScenario" styleClass="btn-try" />
+            
+            <Label text="Make your own choices" styleClass="option-title" style="-fx-padding: 10 0 0 0;" />
+            <Label text="Choose your own combinations and see if they can thrive" styleClass="body-text" wrapText="true"/>
+            <Button text="Try this" onAction="#handleOverpopulationScenario" styleClass="btn-try" />
+            
+            <HBox alignment="CENTER" spacing="15" style="-fx-padding: 15 0 0 0;">
+                <Hyperlink text="Click HERE to learn about the story behind this." onAction="#handleHelp" styleClass="yellow-link" />
+                <Button text="Quit" onAction="#handleQuit" styleClass="btn-blue" />
+            </HBox>
+            </VBox>
+        </StackPane>
+    </center>
+</BorderPane>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ecosystem.controllers.GraphController" styleClass="root">
+    <top>
+        <VBox alignment="TOP_CENTER" spacing="10" style="-fx-padding: 10 20 10 20;">
+            <HBox>
+                <Button text="Back" onAction="#handleBack" styleClass="back-button"/>
+            </HBox>
+            <Label text="Ecosystem Simulator" styleClass="main-title" />
+            <Label text="Population Graph without Resources" styleClass="option-title" style="-fx-padding: 10 0 0 -500;"/>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox alignment="CENTER" style="-fx-padding: 20 50 20 50;">
+            <LineChart fx:id="populationChart" createSymbols="false" legendSide="RIGHT" style="-fx-background-color: white; -fx-padding: 20;">
+                <xAxis>
+                    <NumberAxis label="Day" fx:id="xAxis" autoRanging="true"/>
+                </xAxis>
+                <yAxis>
+                    <NumberAxis label="Population" fx:id="yAxis" autoRanging="true"/>
+                </yAxis>
+            </LineChart>
+        </VBox>
+    </center>
+    
+    <bottom>
+        <VBox alignment="TOP_CENTER" style="-fx-padding: 0 0 40 0;">
+            <Label text="Population Graph with Resources" styleClass="option-title" style="-fx-padding: 0 0 0 -520;"/>
+        </VBox>
+    </bottom>
+</BorderPane>

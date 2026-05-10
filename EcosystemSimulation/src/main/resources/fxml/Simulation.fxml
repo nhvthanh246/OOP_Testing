@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ecosystem.controllers.SimulationController" styleClass="root">
+    <top>
+        <VBox alignment="TOP_CENTER" spacing="5" style="-fx-padding: 10 20 10 20;">
+            <HBox>
+                <Button text="Back" onAction="#handleBack" styleClass="back-button"/>
+            </HBox>
+            <Label text="Ecosystem Simulator" styleClass="main-title" />
+            <HBox alignment="CENTER" spacing="2">
+                <Label text="Your opinion means a lot! Please take the " styleClass="body-text" />
+                <Hyperlink text="survey" styleClass="yellow-link" />
+                <Label text=" to share your thoughts about the game!" styleClass="body-text" />
+            </HBox>
+            <HBox spacing="20" alignment="CENTER_LEFT" style="-fx-padding: 10 0 0 0;">
+                <Button text="Check Population Graph" onAction="#handleCheckGraph" styleClass="btn-blue"/>
+                <Hyperlink text="Help" onAction="#handleBack" styleClass="yellow-link" />
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <HBox spacing="20" style="-fx-padding: 10 30 30 30;" alignment="CENTER">
+            <VBox styleClass="canvas-container">
+                <!-- FocusTraversable makes it able to receive key events -->
+                <Canvas fx:id="canvas" width="900" height="550" focusTraversable="true"/>
+                <HBox spacing="40" alignment="CENTER" style="-fx-padding: 10;">
+                    <Button text="Skip" styleClass="text-button"/>
+                    <Button fx:id="playPauseBtn" text="Pause" onAction="#togglePlayPause" styleClass="text-button"/>
+                    <Button text="End" onAction="#handleBack" styleClass="text-button"/>
+                    <VBox alignment="CENTER" spacing="5">
+                        <Label text="Simulation Speed" styleClass="body-text" style="-fx-font-size: 12px;"/>
+                        <Slider fx:id="speedSlider" min="10" max="500" value="100" blockIncrement="10" prefWidth="150"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+        </HBox>
+    </center>
+</BorderPane>

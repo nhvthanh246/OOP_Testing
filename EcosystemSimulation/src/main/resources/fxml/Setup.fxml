@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ecosystem.controllers.SetupController" styleClass="root">
+    <top>
+        <Button text="Back" onAction="#handleBack" styleClass="back-button" BorderPane.alignment="TOP_LEFT">
+            <BorderPane.margin><Insets top="10" left="10"/></BorderPane.margin>
+        </Button>
+    </top>
+    
+    <center>
+        <StackPane>
+            <BorderPane.margin><Insets top="20" right="100" bottom="20" left="100"/></BorderPane.margin>
+            <VBox alignment="TOP_CENTER" spacing="15.0" styleClass="modern-card">
+                <Label text="Ecosystem Simulator" styleClass="main-title" />
+            <Label text="Determining the Population of Selected Species" styleClass="option-title" />
+            <Label text="Please enter an integer between 0 and 100 for each species. This impacts how long the ecosystem can survive. Recommendations: provide around six times of preys of predators" styleClass="body-text" wrapText="true"/>
+            <Label text="You can start the game with no creatures added to the environment and this won't end the game, but you will need to add creatures during the game." styleClass="body-text" wrapText="true"/>
+            
+            <HBox alignment="CENTER_LEFT">
+                <Label text="Not sure what number to enter?" styleClass="yellow-link" style="-fx-text-fill: #c8e68e; -fx-underline: false;"/>
+            </HBox>
+            
+            <VBox alignment="CENTER" spacing="10" style="-fx-padding: 20 0 0 0;" maxWidth="300">
+                <Label text="Click here for some tips" styleClass="yellow-link" style="-fx-text-fill: #eaea4a; -fx-font-size: 14px; -fx-underline: false;"/>
+                
+                <Label text="Wolf" styleClass="body-text"/>
+                <TextField fx:id="wolfInput" text="5" styleClass="text-input"/>
+                
+                <Label text="Sheep" styleClass="body-text"/>
+                <TextField fx:id="sheepInput" text="30" styleClass="text-input"/>
+                
+                <Button text="Continue" onAction="#handleContinue" styleClass="btn-blue" style="-fx-margin: 20 0 0 0;"/>
+            </VBox>
+            </VBox>
+        </StackPane>
+    </center>
+</BorderPane>
