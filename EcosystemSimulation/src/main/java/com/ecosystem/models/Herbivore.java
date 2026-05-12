@@ -1,78 +1,62 @@
 package com.ecosystem.models;
 
-public class Herbivore extends Animal implements IEdible {
-    private static final double REPRODUCTION_THRESHOLD = 95.0;
+public class Herbivore extends Animal {
 
-    public Herbivore(int x, int y, double initialEnergy) {
-        super(x, y, initialEnergy, 100.0, 1);
+    public Herbivore(double x, double y, double hp, double mp) {
+        super(x, y, hp, 400.0, mp, 200.0, 0.8);
     }
 
     @Override
-    public boolean canEat(IEdible food) {
-        // Polymorphism: Herbivore diet strategy
-        if (this.getEnergy() >= this.getMaxEnergy() * 0.9) return false;
-        return food instanceof Plant;
-    }
+    public boolean canEat(IEdible food) { return false; } // Deprecated
 
     @Override
     public void act(Ecosystem ecosystem) {
-        if (!isAlive())
-            return;
+        if (!isAlive()) return;
 
-        decayEnergy();
-        if (!isAlive())
-            return;
+        decay();
+        if (!isAlive()) return;
 
-        if (isReadyToMove()) {
-            // Evasion Logic: Run from predators first!
-            Organism predator = ecosystem.findNearestPredator(this, 5);
-            // 60% chance to successfully flee. Otherwise, panic (freeze or find food)
-            if (predator != null && Math.random() < 0.6) {
-                ecosystem.moveAwayFromTarget(this, predator);
+        if (this.getMp() < this.getMaxMp() * 0.7) {
+            Plant food = ecosystem.findNearestPlant(this, 30.0);
+            if (food != null) {
+                food.die();
+                ecosystem.removeOrganism(food);
+                this.modifyMp(this.getMaxMp()); // restore to full
             } else {
-                // Find food using Ecosystem's encapsulated API
-                IEdible food = ecosystem.findAdjacentFood(this);
-                if (food != null && canEat(food)) {
-                    this.modifyEnergy(food.getNutritionalValue());
-                    food.beConsumed();
+                Plant nearestFood = ecosystem.findNearestPlant(this, Double.MAX_VALUE);
+                if (nearestFood != null) {
+                    ecosystem.moveTowards(this, nearestFood);
                 } else {
-                    // Move towards nearest food
-                    Organism nearestFood = ecosystem.findNearestFood(this, 6);
-                    if (nearestFood != null) {
-                        ecosystem.moveToTarget(this, nearestFood);
-                    } else {
-                        ecosystem.moveRandomly(this);
-                    }
+                    ecosystem.wander(this);
                 }
             }
+        } else {
+            ecosystem.wander(this);
         }
 
-        // Try to reproduce
         if (canReproduce()) {
             ecosystem.handleReproduction(this);
         }
     }
 
-    // --- IEdible Implementation (Carnivores eat Herbivores) ---
-    @Override
-    public double getNutritionalValue() {
-        return this.getEnergy() * 0.5;
-    }
-
-    @Override
-    public void beConsumed() {
-        this.die();
-    }
-
-    // --- IReproducible Implementation ---
     @Override
     public boolean canReproduce() {
-        return this.getEnergy() >= REPRODUCTION_THRESHOLD;
+        if (this.getMp() <= this.getMaxMp() * 0.5) return false;
+
+        double currentVit = this.getHp() / this.getMaxHp();
+        double lastVit = this.getLastHpPercentage();
+
+        double[] thresholds = {0.8, 0.6, 0.5, 0.4, 0.2};
+        for (double t : thresholds) {
+            if (lastVit > t && currentVit <= t) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
-    public Organism reproduce(int childX, int childY) {
-        this.modifyEnergy(-50.0);
-        return new Herbivore(childX, childY, 50.0);
+    public Organism reproduce(double childX, double childY) {
+        return new Herbivore(childX, childY, 400.0, 100.0); // Full HP, 50% MP
     }
 }

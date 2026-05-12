@@ -6,15 +6,15 @@ package com.ecosystem.models;
  */
 public class OrganismFactory {
 
-    public static Organism createOrganism(Class<? extends Organism> type, int x, int y) {
+    public static Organism createOrganism(Class<? extends Organism> type, double x, double y) {
         if (type == Plant.class) {
-            return new Plant(x, y, 20.0);
+            return new Plant(x, y, 50.0);
         } else if (type == Herbivore.class) {
-            return new Herbivore(x, y, 50.0);
+            // Initial spawn is full HP and MP
+            return new Herbivore(x, y, 400.0, 200.0);
         } else if (type == Carnivore.class) {
-            return new Carnivore(x, y, 90.0);
-        } else if (type == Omnivore.class) {
-            return new Omnivore(x, y, 70.0);
+            // Initial spawn is full HP and MP
+            return new Carnivore(x, y, 600.0, 300.0);
         }
         throw new IllegalArgumentException("Unknown organism type: " + type.getName());
     }

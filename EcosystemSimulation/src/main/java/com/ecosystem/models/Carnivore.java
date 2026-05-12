@@ -1,46 +1,41 @@
 package com.ecosystem.models;
 
 public class Carnivore extends Animal {
-    private static final double REPRODUCTION_THRESHOLD = 120.0;
 
-    public Carnivore(int x, int y, double initialEnergy) {
-        super(x, y, initialEnergy, 150.0, 1);
+    public Carnivore(double x, double y, double hp, double mp) {
+        super(x, y, hp, 600.0, mp, 300.0, 0.8);
     }
 
     @Override
-    public boolean canEat(IEdible food) {
-        // Polymorphism: Carnivore diet strategy
-        // Satiety Logic: Don't kill if already full
-        if (this.getEnergy() >= this.getMaxEnergy() * 0.8)
-            return false;
-        return food instanceof Herbivore;
-    }
+    public boolean canEat(IEdible food) { return false; } // Deprecated
 
     @Override
     public void act(Ecosystem ecosystem) {
-        if (!isAlive())
-            return;
+        if (!isAlive()) return;
 
-        decayEnergy();
-        if (!isAlive())
-            return;
+        decay();
+        if (!isAlive()) return;
 
-        if (isReadyToMove()) {
-            IEdible food = ecosystem.findAdjacentFood(this);
-            if (food != null && canEat(food)) {
-                this.modifyEnergy(food.getNutritionalValue());
-                food.beConsumed();
+        boolean shouldHunt = ecosystem.getCarnivorePopulation() < ecosystem.getHerbivorePopulation() / 2.0;
+
+        if (shouldHunt && this.getMp() < this.getMaxMp() * 0.5) {
+            Herbivore preyNear = ecosystem.findNearestHare(this, 20.0);
+            if (preyNear != null) {
+                preyNear.die();
+                ecosystem.removeOrganism(preyNear);
+                this.modifyMp(this.getMaxMp());
             } else {
-                Organism nearestFood = ecosystem.findNearestFood(this, 8);
-                if (nearestFood != null) {
-                    ecosystem.moveToTarget(this, nearestFood);
+                Herbivore nearestPrey = ecosystem.findNearestHare(this, Double.MAX_VALUE);
+                if (nearestPrey != null) {
+                    ecosystem.moveTowards(this, nearestPrey);
                 } else {
-                    ecosystem.moveRandomly(this);
+                    ecosystem.wander(this);
                 }
             }
+        } else {
+            ecosystem.wander(this);
         }
 
-        // Reproduce
         if (canReproduce()) {
             ecosystem.handleReproduction(this);
         }
@@ -48,12 +43,22 @@ public class Carnivore extends Animal {
 
     @Override
     public boolean canReproduce() {
-        return this.getEnergy() >= REPRODUCTION_THRESHOLD;
+        if (this.getMp() <= this.getMaxMp() * 0.5) return false;
+
+        double currentVit = this.getHp() / this.getMaxHp();
+        double lastVit = this.getLastHpPercentage();
+
+        double[] thresholds = {0.6, 0.4};
+        for (double t : thresholds) {
+            if (lastVit > t && currentVit <= t) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
-    public Organism reproduce(int childX, int childY) {
-        this.modifyEnergy(-60.0);
-        return new Carnivore(childX, childY, 90.0);
+    public Organism reproduce(double childX, double childY) {
+        return new Carnivore(childX, childY, 600.0, 150.0);
     }
 }

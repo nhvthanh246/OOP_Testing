@@ -6,5 +6,5 @@ package com.ecosystem.models;
 public interface IReproducible {
     boolean canReproduce();
 
-    Organism reproduce(int childX, int childY);
+    Organism reproduce(double childX, double childY);
 }

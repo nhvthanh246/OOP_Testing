@@ -2,48 +2,31 @@ package com.ecosystem.models;
 
 /**
  * Inheritance: Plant inherits from Organism.
- * Multiple Interfaces: Implements IEdible and IReproducible.
+ * Multiple Interfaces: Implements IReproducible.
  */
-public class Plant extends Organism implements IEdible, IReproducible {
-    public static final double GROWTH_RATE = 2.0;
+public class Plant extends Organism implements IReproducible {
 
-    public Plant(int x, int y, double initialEnergy) {
-        super(x, y, initialEnergy, 50.0);
+    public Plant(double x, double y, double initialHp) {
+        super(x, y, initialHp, 50.0, 0, 0); // Plants don't use MP
     }
 
     @Override
     public void act(Ecosystem ecosystem) {
-        if (!isAlive()) return;
-        
-        // Photosynthesis
-        this.modifyEnergy(GROWTH_RATE);
+        if (!isAlive())
+            return;
 
-        // Try to reproduce
-        if (canReproduce()) {
-            ecosystem.handleReproduction(this);
-        }
-    }
-
-    // Polymorphism: Specific implementation for IEdible
-    @Override
-    public double getNutritionalValue() {
-        return this.getEnergy() * 0.5; // Plants provide 50% of their energy to the eater
-    }
-
-    @Override
-    public void beConsumed() {
-        this.die(); // Plant dies when eaten
+        // In the new logic, Plants serve merely as food and don't grow/decay
+        // Spawning is handled entirely by Ecosystem.java every 5 frames.
     }
 
     // Polymorphism: Specific implementation for IReproducible
     @Override
     public boolean canReproduce() {
-        return this.getEnergy() >= getMaxEnergy();
+        return false; // Reproduction handled by Ecosystem spawning
     }
 
     @Override
-    public Organism reproduce(int childX, int childY) {
-        this.modifyEnergy(-20.0); // Cost of reproduction
+    public Organism reproduce(double childX, double childY) {
         return new Plant(childX, childY, 20.0);
     }
 }

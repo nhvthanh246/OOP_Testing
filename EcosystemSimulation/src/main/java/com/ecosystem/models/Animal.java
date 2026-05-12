@@ -5,35 +5,59 @@ package com.ecosystem.models;
  * Multiple Interfaces: Implements IMovable and IReproducible.
  */
 public abstract class Animal extends Organism implements IMovable, IReproducible {
-    private int speed;
-    private int movementCooldown;
+    private double velocity;
+    private double lastHpPercentage;
 
-    public Animal(int x, int y, double energy, double maxEnergy, int speed) {
-        super(x, y, energy, maxEnergy);
-        this.speed = speed;
-        this.movementCooldown = speed;
+    public Animal(double x, double y, double hp, double maxHp, double mp, double maxMp, double velocity) {
+        super(x, y, hp, maxHp, mp, maxMp);
+        this.velocity = velocity;
+        this.lastHpPercentage = hp / maxHp;
     }
 
     // Polymorphism: Each animal type will define what it considers edible.
     public abstract boolean canEat(IEdible food);
 
     @Override
-    public void move(int targetX, int targetY) {
-        this.setX(targetX);
-        this.setY(targetY);
+    public void moveForward(Ecosystem ecosystem) {
+        if (!isAlive()) return;
+        
+        double newX = getX() + Math.cos(getAngle()) * velocity;
+        double newY = getY() + Math.sin(getAngle()) * velocity;
+
+        // Constrain to map boundaries and bounce
+        if (newX < 0) {
+            newX = 0;
+            setAngle(Math.PI - getAngle());
+        } else if (newX >= ecosystem.getWidth()) {
+            newX = ecosystem.getWidth() - 1;
+            setAngle(Math.PI - getAngle());
+        }
+
+        if (newY < 0) {
+            newY = 0;
+            setAngle(-getAngle());
+        } else if (newY >= ecosystem.getHeight()) {
+            newY = ecosystem.getHeight() - 1;
+            setAngle(-getAngle());
+        }
+
+        setX(newX);
+        setY(newY);
     }
 
-    protected void decayEnergy() {
-        this.modifyEnergy(-1.0); // Metaboic cost
+    protected void decay() {
+        // Record HP percentage before decay for breeding checks
+        this.lastHpPercentage = this.getHp() / this.getMaxHp();
+        
+        this.modifyHp(-1.0);
+        this.modifyMp(-1.0);
     }
-    
-    // Encapsulation: controls movement ticks internally
-    public boolean isReadyToMove() {
-        movementCooldown--;
-        if (movementCooldown <= 0) {
-            movementCooldown = speed;
-            return true;
-        }
-        return false;
+
+    public double getVelocity() {
+        return velocity;
+    }
+
+    public double getLastHpPercentage() {
+        return lastHpPercentage;
     }
 }
